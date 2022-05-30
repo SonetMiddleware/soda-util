@@ -30,6 +30,7 @@ export const getChainId = async () => {
     return chainId
   } catch (e) {
     console.error(e)
+    return 0
   }
 }
 
