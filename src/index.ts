@@ -12,7 +12,11 @@ import {
   connectMetaMask,
   invokeWeb3Api
 } from './metamask'
-import { createWeb3, logout } from './service/metamask'
+import {
+  createWeb3,
+  requestAccounts as serviceRequestAccounts,
+  logout
+} from './service/metamask'
 import { HttpRequestType, httpRequest } from './network'
 
 export {
@@ -22,6 +26,7 @@ export {
   registerMessage,
   sendMessage,
   createWeb3,
+  serviceRequestAccounts,
   logout,
   getUserAccount,
   getChainId,
