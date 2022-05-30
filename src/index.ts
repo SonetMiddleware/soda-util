@@ -1,0 +1,39 @@
+import {
+  randomId,
+  MessageHandler,
+  getMessageHandler,
+  registerMessage,
+  sendMessage
+} from './message'
+import {
+  getUserAccount,
+  getChainId,
+  isMetamaskConnected,
+  connectMetaMask,
+  invokeWeb3Api
+} from './metamask'
+import { createWeb3, logout } from './service/metamask'
+import { HttpRequestType, httpRequest } from './network'
+
+export {
+  randomId,
+  MessageHandler,
+  getMessageHandler,
+  registerMessage,
+  sendMessage,
+  createWeb3,
+  logout,
+  getUserAccount,
+  getChainId,
+  isMetamaskConnected,
+  connectMetaMask,
+  invokeWeb3Api,
+  HttpRequestType,
+  httpRequest
+}
+import { bgInit as metamaskBgInit } from './metamask'
+import { bgInit as networkBgInit } from './network'
+export const bgInit = () => {
+  metamaskBgInit()
+  networkBgInit()
+}
