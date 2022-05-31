@@ -55,15 +55,18 @@ export const isMetamaskConnected = () => {
   return metamaskInstalled
 }
 
+let cachedWallet = null
 export const connectMetaMask = async () => {
   try {
     const { accounts, chainId } = await MetaMask.requestAccounts()
-    return {
+    cachedWallet = {
       account: first(accounts),
       chainId
     }
+    return cachedWallet
   } catch (e) {
     console.error('[util-metamask] connectMetaMask error: ', e)
+    if (cachedWallet) return cachedWallet
     throw new Error('connect Metamask error: ' + e)
   }
 }
