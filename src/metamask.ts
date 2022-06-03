@@ -27,7 +27,7 @@ export const getChainId = async () => {
     const res: any = await sendMessage({ type: MessageTypes.Connect_Metamask })
     console.debug('[util-metamask] getChainId: ', res)
     const { chainId } = res.result
-    return chainId
+    return Number(chainId)
   } catch (e) {
     console.error(e)
     return 0
