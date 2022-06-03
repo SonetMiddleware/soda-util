@@ -39,7 +39,7 @@ async function httpRequestHandler(request: any) {
     if (res.data) return res.data
   } catch (e) {
     console.error(e)
-    response.error = e
+    response.error = (e as any).message || e
   }
   return response
 }

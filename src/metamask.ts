@@ -82,7 +82,7 @@ async function connectMessageHandler(request: any) {
     response.result = res
   } catch (e) {
     console.error(e)
-    response.error = e
+    response.error = (e as any).message || e
   }
   return response
 }
@@ -97,7 +97,7 @@ export const invokeWeb3Api = async (request: any) => {
     return res
   } catch (e) {
     console.error(e)
-    response.error = e
+    response.error = (e as any).message || e
   }
   console.debug('[util-metamask] invokeWeb3Api: ', response)
   return response
@@ -115,7 +115,7 @@ async function invokeWeb3ApiMessageHandler(request: any) {
     response.result = res
   } catch (e) {
     console.error(e)
-    response.error = e
+    response.error = (e as any).message || e
   }
   return response
 }
