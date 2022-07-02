@@ -26,10 +26,14 @@ export const sendMessage = async (message: any) => {
   return new Promise((resolve, reject) => {
     chrome.runtime.sendMessage(msg, function (response) {
       console.debug('[util-message] response from backend：' + response)
-      const res = JSON.parse(response)
-      if (res.id === id) {
-        const r = res.error ? res : res.result
-        resolve(r)
+      try {
+        const res = JSON.parse(response)
+        if (res.id === id) {
+          const r = res.error ? res : res.result
+          resolve(r)
+        }
+      } catch (e) {
+        reject(e)
       }
     })
   })
