@@ -9,18 +9,11 @@ const MessageTypes = {
   InvokeWeb3Api: 'InvokeWeb3Api'
 }
 
-let accountGlobal = ''
-export const getUserAccount = async (global?: boolean) => {
-  if (global && accountGlobal) return accountGlobal
+export const getUserAccount = async () => {
   const res: any = await sendMessage({ type: MessageTypes.Connect_Metamask })
   console.debug('[util-metamask] getUserAccount: ', res)
-  if (res.error) {
-    accountGlobal = ''
-  } else {
-    const { account } = res.result
-    accountGlobal = account
-  }
-  return accountGlobal
+  const { account } = res.result
+  return account
 }
 export const getChainId = async () => {
   try {

@@ -6,10 +6,13 @@ import createMetaMaskProvider, {
 
 let provider: MetaMaskInpageProvider | null = null
 let web3: Web3 | null = null
+let _accounts: string[] | null = null
+let _chainId: number | null = null
 
 async function onAccountsChanged(accounts: string[]) {
   console.debug('[util-metamask] onAccountsChanged: ', accounts)
   createProvider()
+  _accounts = accounts
 }
 
 async function onChainIdChanged(id: string) {
@@ -17,6 +20,7 @@ async function onChainIdChanged(id: string) {
   const chainId_ = Number.parseInt(id, 16)
   console.debug('[util-metamask] onChainIdChanged: ', chainId_)
   createProvider()
+  _chainId = chainId_
   return chainId_
 }
 
@@ -71,18 +75,23 @@ export function createWeb3() {
 }
 
 export async function requestAccounts() {
-  const web3 = createWeb3()
+  let web3: any = null
+  if (!_accounts || !_chainId) web3 = createWeb3()
 
-  // update accounts
-  const accounts = await web3.eth.requestAccounts()
-
-  // update chain id
-  const chainId = await web3.eth.getChainId()
-  onChainIdChanged(chainId.toString(16))
+  if (!_accounts) {
+    // update accounts
+    const accounts = await web3.eth.requestAccounts()
+    await onAccountsChanged(accounts)
+  }
+  if (!_chainId) {
+    // update chain id
+    const chainId = await web3.eth.getChainId()
+    await onChainIdChanged(chainId.toString(16))
+  }
 
   return {
-    chainId,
-    accounts
+    chainId: _chainId,
+    accounts: _accounts
   }
 }
 
