@@ -1,5 +1,23 @@
 import axios from 'axios'
 import { registerMessage, sendMessage } from './message'
+import { getChainId } from './metamask'
+
+export const API_HOST = 'https://apiv2-test.platwin.io/api/v1'
+
+export const getChainName = async (chainId?: number) => {
+  let _chainId = chainId
+  if (!chainId) {
+    _chainId = await getChainId()
+  }
+  const map = {
+    137: 'polygon',
+    1: 'mainnet',
+    80001: 'mumbai',
+    4: 'rinkeby'
+  }
+  // fallback to mumbai
+  return map[_chainId] || map[80001]
+}
 
 // message to background
 const MessageTypes = {

@@ -17,7 +17,7 @@ import {
   requestAccounts as serviceRequestAccounts,
   logout
 } from './service/metamask'
-import { HttpRequestType, httpRequest } from './network'
+import { HttpRequestType, httpRequest, API_HOST, getChainName } from './network'
 
 export {
   randomId,
@@ -34,7 +34,9 @@ export {
   connectMetaMask,
   invokeWeb3Api,
   HttpRequestType,
-  httpRequest
+  httpRequest,
+  API_HOST,
+  getChainName
 }
 import { bgInit as metamaskBgInit } from './metamask'
 import { bgInit as networkBgInit } from './network'
