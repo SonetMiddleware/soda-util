@@ -3,6 +3,7 @@ import { registerMessage, sendMessage } from './message'
 import { getChainId } from './metamask'
 
 export const API_HOST = 'https://apiv2.platwin.io/api/v1'
+// export const API_HOST = 'https://apiv2-test.platwin.io/api/v1' //FIXME:test only
 
 export const getChainName = async (chainId?: number) => {
   let _chainId = chainId
