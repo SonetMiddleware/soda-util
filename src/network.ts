@@ -1,25 +1,41 @@
 import axios from 'axios'
 import { registerMessage, sendMessage } from './message'
 import { getChainId } from './metamask'
+import { getLocal, saveLocal, StorageKeys } from '@soda/soda-core-ui'
 
-export const API_HOST = 'https://apiv2.platwin.io/api/v1'
+export const API_HOST =
+  process.env.NODE_ENV === 'development'
+    ? 'https://apiv2-test.platwin.io/api/v1'
+    : 'https://apiv2.platwin.io/api/v1'
 // export const API_HOST = 'https://apiv2-test.platwin.io/api/v1' //FIXME:test only
 
+console.log('NODE_ENV: ', process.env.NODE_ENV, API_HOST)
+
+const Chain_Map = {
+  137: 'polygon',
+  1: 'mainnet',
+  80001: 'mumbai',
+  4: 'rinkeby',
+  flowmain: 'flowmain',
+  flowtest: 'flowtest'
+}
 export const getChainName = async (chainId?: number) => {
   let _chainId = chainId
   if (!chainId) {
     _chainId = await getChainId()
   }
-  const map = {
-    137: 'polygon',
-    1: 'mainnet',
-    80001: 'mumbai',
-    4: 'rinkeby'
-  }
+
   // fallback to mumbai
-  return map[_chainId] || map[80001]
+  return Chain_Map[_chainId] || Chain_Map[80001]
 }
 
+export const getChainIdByName = (chain_name: string) => {
+  for (let key of Object.keys(Chain_Map)) {
+    if (Chain_Map[key] === chain_name) {
+      return key
+    }
+  }
+}
 // message to background
 const MessageTypes = {
   HTTP: 'HttpRequest'

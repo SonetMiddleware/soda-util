@@ -2,25 +2,85 @@ import { sendMessage, registerMessage } from './message'
 import * as MetaMask from './service/metamask'
 import * as Web3 from './service/web3'
 import { first } from 'lodash-es'
+import { getLocal, saveLocal, StorageKeys } from '@soda/soda-core-ui'
 
 // message to background
 const MessageTypes = {
   Connect_Metamask: 'Connect_Metamask',
   InvokeWeb3Api: 'InvokeWeb3Api'
 }
+const CHAIN_SUPPORTED = [4, 80001, 1, 137, 'flowmain', 'flowtest']
 
-export const getUserAccount = async () => {
-  const res: any = await sendMessage({ type: MessageTypes.Connect_Metamask })
+export const getUserAccount = async (targetChainId?: number) => {
+  const res: any = await sendMessage({
+    type: MessageTypes.Connect_Metamask,
+    request: { targetChainId }
+  })
   console.debug('[util-metamask] getUserAccount: ', res)
-  const { account } = res.result
-  return account
+  let flowAddr
+  const resStr = await getLocal(StorageKeys.LOGINED_ACCOUNT)
+  if (resStr) {
+    try {
+      const res: any = JSON.parse(resStr)
+      if (res.addr) {
+        flowAddr = res.addr
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  if (flowAddr) {
+    return flowAddr
+  }
+  const { account, chainId } = res.result
+  if (res.error) {
+    if (flowAddr) {
+      return flowAddr
+    } else {
+      return
+    }
+  } else if (CHAIN_SUPPORTED.includes(chainId)) {
+    return account
+  } else {
+    return flowAddr
+  }
+  return ''
 }
+
 export const getChainId = async () => {
   try {
     const res: any = await sendMessage({ type: MessageTypes.Connect_Metamask })
     console.debug('[util-metamask] getChainId: ', res)
-    const { chainId } = res.result
-    return Number(chainId)
+    let flowChainId
+    const resStr = await getLocal(StorageKeys.LOGINED_ACCOUNT)
+    if (resStr) {
+      try {
+        const res: any = JSON.parse(resStr)
+        if (res.chain) {
+          flowChainId = res.chain
+        }
+      } catch (e) {
+        console.log(e)
+      }
+    }
+    if (flowChainId) {
+      return flowChainId
+    }
+    if (res.error) {
+      if (flowChainId) {
+        return flowChainId
+      } else {
+        return
+      }
+    } else {
+      const { chainId } = res.result
+      if (CHAIN_SUPPORTED.includes(chainId)) {
+        return Number(chainId)
+      } else {
+        return flowChainId
+      }
+    }
+    return null
   } catch (e) {
     console.error(e)
     return 0
@@ -49,9 +109,11 @@ export const isMetamaskConnected = () => {
 }
 
 let cachedWallet = null
-export const connectMetaMask = async () => {
+export const connectMetaMask = async (request?: { targetChainId?: number }) => {
   try {
-    const { accounts, chainId } = await MetaMask.requestAccounts()
+    const { accounts, chainId } = await MetaMask.requestAccounts(
+      request?.targetChainId
+    )
     cachedWallet = {
       account: first(accounts),
       chainId
@@ -71,7 +133,7 @@ async function connectMessageHandler(request: any) {
     return JSON.stringify(response)
   }
   try {
-    const res = await connectMetaMask()
+    const res = await connectMetaMask(request)
     response.result = res
   } catch (e) {
     console.error(e)

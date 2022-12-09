@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "types": ["jest", "chrome"],
+    "types": ["jest", "chrome", "node"],
     "skipLibCheck": true,
     "declaration": true,
     "target": "ES2020",

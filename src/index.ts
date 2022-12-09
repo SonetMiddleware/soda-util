@@ -17,7 +17,13 @@ import {
   requestAccounts as serviceRequestAccounts,
   logout
 } from './service/metamask'
-import { HttpRequestType, httpRequest, API_HOST, getChainName } from './network'
+import {
+  HttpRequestType,
+  httpRequest,
+  API_HOST,
+  getChainName,
+  getChainIdByName
+} from './network'
 
 export {
   randomId,
@@ -36,7 +42,8 @@ export {
   HttpRequestType,
   httpRequest,
   API_HOST,
-  getChainName
+  getChainName,
+  getChainIdByName
 }
 import { bgInit as metamaskBgInit } from './metamask'
 import { bgInit as networkBgInit } from './network'

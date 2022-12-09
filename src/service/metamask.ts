@@ -74,19 +74,39 @@ export function createWeb3() {
   return web3
 }
 
-export async function requestAccounts() {
-  let web3: any = null
-  if (!_accounts || !_chainId) web3 = createWeb3()
+export async function requestAccounts(targetChainId?: number) {
+  let _web3: any = web3
+
+  if (!_web3) {
+    _web3 = createWeb3()
+  }
+  // if (!_accounts || !_chainId) web3 = createWeb3()
 
   if (!_accounts) {
     // update accounts
-    const accounts = await web3.eth.requestAccounts()
+    const accounts = await _web3.eth.requestAccounts()
     await onAccountsChanged(accounts)
   }
   if (!_chainId) {
     // update chain id
-    const chainId = await web3.eth.getChainId()
+    const chainId = await _web3.eth.getChainId()
     await onChainIdChanged(chainId.toString(16))
+  }
+  if (_chainId !== targetChainId && _web3) {
+    try {
+      await _web3.currentProvider.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: Web3.utils.toHex(targetChainId) }]
+      })
+      _chainId = await _web3.eth.getChainId()
+    } catch (switchError: any) {
+      console.log('[switchError]: ', switchError)
+      // This error code indicates that the chain has not been added to MetaMask.
+      if (switchError.code === 4902) {
+        alert('add this chain id')
+      }
+    }
+    await onChainIdChanged(_chainId.toString(16))
   }
 
   return {
