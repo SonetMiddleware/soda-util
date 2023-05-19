@@ -74,9 +74,17 @@ export function createWeb3() {
   return web3
 }
 
+export async function metamaskGetAccounts() {
+  let _web3: any = web3
+  if (!_web3) {
+    _web3 = createWeb3()
+  }
+  const accounts = await _web3.eth.getAccounts()
+  return accounts
+}
+
 export async function requestAccounts(targetChainId?: number) {
   let _web3: any = web3
-
   if (!_web3) {
     _web3 = createWeb3()
   }
@@ -92,7 +100,7 @@ export async function requestAccounts(targetChainId?: number) {
     const chainId = await _web3.eth.getChainId()
     await onChainIdChanged(chainId.toString(16))
   }
-  if (_chainId !== targetChainId && _web3) {
+  if (_chainId !== targetChainId && _web3 && targetChainId) {
     try {
       await _web3.currentProvider.request({
         method: 'wallet_switchEthereumChain',

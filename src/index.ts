@@ -10,7 +10,8 @@ import {
   getChainId,
   isMetamaskConnected,
   connectMetaMask,
-  invokeWeb3Api
+  invokeWeb3Api,
+  isMetamaskAccountConnected
 } from './metamask'
 import {
   createWeb3,
@@ -43,7 +44,8 @@ export {
   httpRequest,
   API_HOST,
   getChainName,
-  getChainIdByName
+  getChainIdByName,
+  isMetamaskAccountConnected
 }
 import { bgInit as metamaskBgInit } from './metamask'
 import { bgInit as networkBgInit } from './network'

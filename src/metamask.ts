@@ -126,6 +126,15 @@ export const connectMetaMask = async (request?: { targetChainId?: number }) => {
   }
 }
 
+export const isMetamaskAccountConnected = async () => {
+  const accounts = await MetaMask.metamaskGetAccounts()
+  console.log('[MetaMask.metamaskGetAccounts]: ', accounts)
+  if (accounts && accounts.length > 0) {
+    return true
+  }
+  return false
+}
+
 async function connectMessageHandler(request: any) {
   const response: any = {}
   if (!isMetamaskConnected()) {
