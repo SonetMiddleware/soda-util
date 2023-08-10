@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { registerMessage, sendMessage } from './message'
 import { getChainId } from './metamask'
-import { getLocal, saveLocal, StorageKeys } from '@soda/soda-core-ui'
 
 export const API_HOST =
   process.env.NODE_ENV === 'development'

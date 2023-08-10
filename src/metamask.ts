@@ -2,7 +2,8 @@ import { sendMessage, registerMessage } from './message'
 import * as MetaMask from './service/metamask'
 import * as Web3 from './service/web3'
 import { first } from 'lodash-es'
-import { getLocal, saveLocal, StorageKeys } from '@soda/soda-core-ui'
+import { getLocal, StorageKeys } from './service/storage'
+// import { getLocal, saveLocal, StorageKeys } from '@soda/soda-core-ui'
 
 // message to background
 const MessageTypes = {
