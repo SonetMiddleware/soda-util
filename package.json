@@ -25,7 +25,8 @@
     "axios": "^0.27.2",
     "lodash-es": "^4.17.21",
     "web3": "^1.4.0",
-    "web3-core": "^1.4.0"
+    "web3-core": "^1.4.0",
+    "webextension-polyfill-ts": "^0.25.0"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.137",
