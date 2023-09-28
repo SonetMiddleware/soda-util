@@ -186,6 +186,7 @@ async function invokeWeb3ApiMessageHandler(request: any) {
 }
 
 export const bgInit = () => {
+  checkMetamaskInstalled()
   registerMessage({
     message: MessageTypes.Connect_Metamask,
     handleFunc: connectMessageHandler

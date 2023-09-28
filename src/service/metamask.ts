@@ -4,6 +4,20 @@ import createMetaMaskProvider, {
   MetaMaskInpageProvider
 } from '@dimensiondev/metamask-extension-provider'
 
+const ChainConfig = {
+  137: {
+    chainId: '0x89',
+    chainName: 'Polygon Mainnet',
+    nativeCurrency: {
+      name: 'MATIC',
+      symbol: 'MATIC',
+      decimals: 18
+    },
+    rpcUrls: ['https://rpc-mainnet.maticvigil.com/'],
+    blockExplorerUrls: ['https://polygonscan.com/']
+  }
+}
+
 let provider: MetaMaskInpageProvider | null = null
 let web3: Web3 | null = null
 let _accounts: string[] | null = null
@@ -111,7 +125,18 @@ export async function requestAccounts(targetChainId?: number) {
       console.log('[switchError]: ', switchError)
       // This error code indicates that the chain has not been added to MetaMask.
       if (switchError.code === 4902) {
-        alert('add this chain id')
+        // alert('add this chain id')
+        if (ChainConfig[targetChainId]) {
+          await _web3.currentProvider.request({
+            method: 'wallet_addEthereumChain',
+            params: [ChainConfig[targetChainId]]
+          })
+        } else {
+          alert(`Please add chain with id ${targetChainId} manually`)
+        }
+      } else if (switchError.code === 4001) {
+        alert('User canceled.')
+        return
       }
     }
     await onChainIdChanged(_chainId.toString(16))
