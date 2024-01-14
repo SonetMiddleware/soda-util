@@ -12,10 +12,7 @@ const MessageTypes = {
 const CHAIN_SUPPORTED = [4, 80001, 1, 137, 'flowmain', 'flowtest']
 
 export const getUserAccount = async (targetChainId?: number) => {
-  const res: any = await sendMessage({
-    type: MessageTypes.Connect_Metamask,
-    request: { targetChainId }
-  })
+  const res = await connectMetaMask({ targetChainId })
   console.debug('[util-metamask] getUserAccount: ', res)
   let flowAddr
   const resStr = await getLocal(StorageKeys.LOGINED_ACCOUNT)
@@ -32,8 +29,8 @@ export const getUserAccount = async (targetChainId?: number) => {
   if (flowAddr) {
     return flowAddr
   }
-  const { account, chainId } = res.result
-  if (res.error) {
+  const { account, chainId } = res
+  if (!res) {
     if (flowAddr) {
       return flowAddr
     } else {
@@ -49,7 +46,7 @@ export const getUserAccount = async (targetChainId?: number) => {
 
 export const getChainId = async () => {
   try {
-    const res: any = await sendMessage({ type: MessageTypes.Connect_Metamask })
+    const res: any = await connectMetaMask()
     console.debug('[util-metamask] getChainId: ', res)
     let flowChainId
     const resStr = await getLocal(StorageKeys.LOGINED_ACCOUNT)
@@ -108,7 +105,7 @@ export const isMetamaskConnected = () => {
   return metamaskInstalled
 }
 
-let cachedWallet = null
+let cachedWallet: { account: string; chainId: number } = null
 export const connectMetaMask = async (request?: { targetChainId?: number }) => {
   try {
     const { accounts, chainId } = await MetaMask.requestAccounts(
@@ -145,10 +142,11 @@ async function connectMessageHandler(request: any) {
 export const invokeWeb3Api = async (request: any) => {
   const response: any = {}
   try {
-    const res: any = await sendMessage({
-      type: MessageTypes.InvokeWeb3Api,
-      request
-    })
+    // const res: any = await sendMessage({
+    //   type: MessageTypes.InvokeWeb3Api,
+    //   request
+    // })
+    const res: any = await invokeWeb3ApiMessageHandler(request)
     return res
   } catch (e) {
     console.error(e)
