@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { registerMessage, sendMessage } from './message'
 import { getChainId } from './metamask'
+import fetchAdapter from '@vespaiach/axios-fetch-adapter'
 
 export const API_HOST =
   process.env.NODE_ENV === 'development'
@@ -62,13 +63,16 @@ export const httpRequest = async (request: {
 async function httpRequestHandler(request: any) {
   const response: any = {}
   const { url, params, type } = request
+  const axiosInstance = axios.create({
+    adapter: fetchAdapter
+  })
   console.debug('[util-network] http request: ', url, params, type)
   try {
     let res: any
     if (type && type === HttpRequestType.POST) {
-      res = await axios.post(url, params ? params : {})
+      res = await axiosInstance.post(url, params ? params : {})
     } else {
-      res = await axios.get(url, params ? { params } : {})
+      res = await axiosInstance.get(url, params ? { params } : {})
     }
     if (res.data) return res.data
   } catch (e) {

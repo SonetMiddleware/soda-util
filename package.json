@@ -19,8 +19,8 @@
   "license": "ISC",
   "dependencies": {
     "@babel/runtime": "^7.17.9",
-    "@dimensiondev/metamask-extension-provider": "^3.0.6-20210519045409-1835d4d",
-    "@soda/soda-core-ui": "workspace:^0.0.1",
+    "@dimensiondev/metamask-extension-provider": "^3.0.6-20221105074301-8806fca",
+    "@vespaiach/axios-fetch-adapter": "^0.3.1",
     "axios": "^0.27.2",
     "lodash-es": "^4.17.21",
     "web3": "^1.4.0",

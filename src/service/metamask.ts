@@ -114,7 +114,7 @@ export async function requestAccounts(targetChainId?: number) {
     const chainId = await _web3.eth.getChainId()
     await onChainIdChanged(chainId.toString(16))
   }
-  if (_chainId !== targetChainId && _web3 && targetChainId) {
+  if (targetChainId && _chainId !== targetChainId && _web3) {
     try {
       await _web3.currentProvider.request({
         method: 'wallet_switchEthereumChain',
